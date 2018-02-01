@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include<iostream>
+#include<clocale>
+#include <time.h> 
+const int n = 10000;
+using namespace std;
+void selection(int *ar, int size)
+{
+	int i, j, mx, nmx;
+
+	for (i = 0; i < size - 1; i++)
+	{
+		mx = ar[i];
+		nmx = i;
+		for (j = i + 1; j < size; j++)
+		{
+			if (ar[j]<mx)
+			{
+				mx = ar[j];
+				nmx = j;
+			}
+		}
+		ar[nmx] = ar[i];
+		ar[i] = mx;
+	}
+}
+int main()
+{
+
+	int j, i, a[n];
+	setlocale(LC_ALL, "Russian");
+	for (i = 0; i < n; i++)
+		a[i] = rand();
+	cout << "Первые 10 элементов массива: ";
+	for (i = 0; i < 10; i++)
+		cout << a[i] << " ";
+	cout << endl;
+	clock_t start = clock();
+	selection(a, n);
+	clock_t end = clock();
+	double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+	printf("Время работы процедуры: %f секунды\n", seconds);
+	cout << "Отсортированный массив\n";
+	cout << "Первые 10 элементов отсортированного массива: ";
+	for (i = 0; i < 10; i++)
+		cout << a[i] << " ";
+	cout << endl;
+	cout << "Последние 10 элементов отсортированного массива: ";
+	for (i = 9990; i < n; i++)
+		cout << a[i] << " ";
+	cout << endl;
+	system("pause");
+	return 0;
+}
+
