@@ -1,9 +1,9 @@
 #include <iostream>
 #include <time.h>
-const int n = 10000;
+const int n = 10000, nn=3000;
 using namespace std;
 #define LeftChild( i )  ( 2 * ( i ) + 1 )
-//static const unsigned long SmallCutoff = 20;
+
 void show(int a[n],int n)
 {
     int i;
@@ -16,6 +16,27 @@ void show(int a[n],int n)
     for (i = n-10; i < n; i++)
         cout << a[i] << " ";
     cout << endl;
+}
+//глупая сортировка
+void stupidSort(int *A, int n)
+{
+     clock_t start = clock();
+    int i = 0, tmp;
+    while (i < n - 1)
+    {
+        if (A[i+1] < A[i])
+        {
+            tmp = A[i];
+            A[i] = A[i+1];
+            A[i+1] = tmp;
+            i = 0;
+        }
+        else i++;
+    }
+    clock_t end = clock();
+    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    cout << "Sorting method stupidSort" << endl;
+    printf("The time of the procedure: %f seconds (for n=3000 elements)\n", seconds);
 }
 //пирамидальная сортировка
 int GT(int a, int b)
@@ -108,7 +129,6 @@ void MMERGE(int A[],int B[], size_t l, size_t m, size_t r)
 }
 void MSORT(int A[], int B[], size_t l, size_t  r)
 {
-    clock_t start = clock();
     size_t m;
     if (l < r) {
         m = ((l + r) >> 1);
@@ -116,30 +136,36 @@ void MSORT(int A[], int B[], size_t l, size_t  r)
         MSORT(A, B, m + 1, r);
         MMERGE(A, B, l, m, r);
     }
-    clock_t end = clock();
-    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-    cout << "Sorting method Merge sort" << endl;
-    printf("The time of the procedure: %f seconds\n", seconds);
 }
 int main()
 {
     size_t l=0,r=n;
-    int  i, a[n], b[n], c[10],d[n],e[n];
+    int  i, a[n], b[n], c[10],d[n],e[n],g[nn];
     for (i = 0; i < n; i++)
     {
         a[i] = 0 + rand() % 9;
         d[i] = a[i];
         e[i]=a[i];
+        g[i]=a[i];
+    }
+    for (i = 0; i < nn; i++)
+    {
+        g[i] = 0 + rand() % 9;
     }
     cout << "First 10 elements of the array: ";
     for (i = 0; i < 10; i++)
         cout << a[i] << " ";
     cout << endl;
-    /*selection(a, n);*/
-    //radix(d, b, c, 10, n);
-    MSORT(e,b,l,r);
-    //HEAPSORT(a,n);
-    show(a,n);
+    radix(a, b, c, 10, n);
+    clock_t start = clock();
+    MSORT(d,b,l,r);
+    clock_t end = clock();
+    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+    cout << "Sorting method Merge sort" << endl;
+    printf("The time of the procedure: %f seconds\n", seconds);
+    HEAPSORT(e,n);
+    stupidSort(g,nn);
+    show(d,n);
     system("pause");
     return 0;
 }
